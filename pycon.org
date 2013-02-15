@@ -246,3 +246,10 @@ what problem do they solve?
 
 
 
+* numpy questions
+** how do you access individual elements in a multidimensional array?
+** how do you access the last column of every matrix in a 3d array?
+** if i have a multidimensional array 'arr' with shape (x,y,z), what will the shape of arr[0] be?
+** show how the broadcasting rule for scalars and arrays applies to the assignment operator
+** select all rows from a matrix whose sum is larger than a given value x
+

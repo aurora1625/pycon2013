@@ -255,4 +255,9 @@ what problem do they solve?
 ** compute a sparsity and density ratio for our grocery domain incidence matrix
 ** figure out the most popular product from our grocery dataset
 ** figure out who is the user that has purchased the largest amount of different prods
-
+* pandas questions
+** show how to add and delete a col in a dataframe
+** show how to add and delete a row in a dataframe
+** discover whether an indexed column of a dataframe is a view or a copy
+** show how to exchange the columns and index properties of a dataframe
+** are index objects mutable or immutable?

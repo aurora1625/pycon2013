@@ -252,6 +252,7 @@ what problem do they solve?
 ** if i have a multidimensional array 'arr' with shape (x,y,z), what will the shape of arr[0] be?
 ** show how the broadcasting rule for scalars and arrays applies to the assignment operator
 ** select all rows from a matrix whose sum is larger than a given value x
+** how do you detect the presence of NANs in an array?
 ** compute a sparsity and density ratio for our grocery domain incidence matrix
 ** figure out the most popular product from our grocery dataset
 ** figure out who is the user that has purchased the largest amount of different prods

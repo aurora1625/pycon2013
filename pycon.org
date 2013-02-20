@@ -49,7 +49,7 @@ estimated rating(s)." -- Adomavicius and Tuzhilin, 2005
 | ? | ? | ? | ? | 2 |
 |---+---+---+---+---|
 ** content-based (or content-based filtering)
-Generic expression: 
+Generic expression:
 #+begin_src latex
  \hat{r}_{u,i} = aggr_{i' \in I_u} r_{u,i'}
 #+end_src
@@ -58,7 +58,7 @@ Generic expression:
 ** collaborative filtering
 Generic expression:
 #+begin_src latex
- \hat{r}_{u,i} = aggr_{u' \in U_i} r_{u',i} 
+ \hat{r}_{u,i} = aggr_{u' \in U_i} r_{u',i}
 #+end_src
 *** show this is kind of a 'col based' approach
 ** hybrid solutions
@@ -82,7 +82,7 @@ communities.
 *** pytables
 
 *** optional
-Pydata is 
+Pydata is
 - the name of a conference;
 - a community of users and developers of data analysis tools in
   Python;
@@ -108,7 +108,7 @@ on the data stored in a NumPy array without copying any data.
 #+begin_src python
   import numpy as np
   np.array([0,9,5,4,3])
-  
+
 #+end_src
 
 #+RESULTS:
@@ -163,7 +163,7 @@ row_mean = nanmean(ratings_mtx, axis=0)
 col_mean = nanmean(ratings_mtx, axis=1)
 #+END_SRC
 
-* first look at our grocery domain dataset 
+* first look at our grocery domain dataset
 The first portion of our dataset is called an incidence matrix. This
 is a |U| x |I| matrix that shows the relationship between users and
 items. An entry in row u and column i is 1 if user u and item i are
@@ -177,13 +177,13 @@ ever purchased'.
   inc_mtx = np.loadtxt(open('data/inc_mtx_10k_1k.csv', 'r'), delimiter=',')
   inc_mtx.shape
   inc_mtx.size
-  
+
 #+end_src
 
 Let's compute some basic stats from this matrix
-#+begin_src python  
+#+begin_src python
   tot_sum = inc_mtx.sum()
-  row_sum = inc_mtx.sum(axis=0) 
+  row_sum = inc_mtx.sum(axis=0)
   col_sum = inc_mtx.sum(axis=1)
 
   # ratio of ones and zeros to total entries
@@ -217,21 +217,21 @@ what problem do they solve?
                         [0,    0.5, 0  ],  # viewed by 2
                         [0.1,  0.4, 0  ],  # viewed by 2
                         [0,    0.3, 0  ]])  # ?
-  
+
   def aggr(mtx):
       return np.mean(mtx)
-  
+
   # build profiles
   user_1_profile = aggr(items_mtx[[0,1]])
   user_2_profile = aggr(items_mtx[[2,3]])
-  
-  
+
+
   def sim(v1, v2):
       pass
-  
+
   # recommend!
   estimated_rating_1_4 = sim(user_1_profile, items_mtx[4])
-  
+
 #+end_src
 
 #+RESULTS:
@@ -246,19 +246,181 @@ what problem do they solve?
 
 
 
-* numpy questions
-** how do you access individual elements in a multidimensional array?
-** how do you access the last column of every matrix in a 3d array?
-** if i have a multidimensional array 'arr' with shape (x,y,z), what will the shape of arr[0] be?
-** show how the broadcasting rule for scalars and arrays applies to the assignment operator
-** select all rows from a matrix whose sum is larger than a given value x
-** how do you detect the presence of NANs in an array?
-** compute a sparsity and density ratio for our grocery domain incidence matrix
-** figure out the most popular product from our grocery dataset
-** figure out who is the user that has purchased the largest amount of different prods
-* pandas questions
-** show how to add and delete a col in a dataframe
-** show how to add and delete a row in a dataframe
-** discover whether an indexed column of a dataframe is a view or a copy
-** show how to exchange the columns and index properties of a dataframe
-** are index objects mutable or immutable?
+* Numpy Questions
+** How do you access individual elements in a multidimensional array?
+** How do you access the last column of every matrix in a 3d array?
+** If i have a multidimensional array 'arr' with shape (x,y,z), what will the shape of arr[0] be?
+** Show how the broadcasting rule for scalars and arrays applies to the assignment operator
+** Select all rows from a matrix whose sum is larger than a given value x
+** How do you detect the presence of NANs in an array?
+** Compute a sparsity and density ratio for our grocery domain incidence matrix
+** Figure out the most popular product from our grocery dataset
+** Figure out who is the user that has purchased the largest amount of different prods
+* Pandas questions
+** Show how to add and delete a col in a dataframe
+** Show how to add and delete a row in a dataframe
+** Discover whether an indexed column of a dataframe is a view or a copy
+** Show how to exchange the columns and index properties of a dataframe
+** Are index objects mutable or immutable?
+* Pytables questions
+** Create a PyTables file in your working environment.
+
+In [1]: import tables
+
+In [2]: import numpy
+
+In [3]: h5file = tables.openFile('/home/deploy/pycon/tutorial1.h5', mode='w', title='Test File')
+
+In [4]: print h5file
+/home/deploy/pycon/tutorial1.h5 (File) 'Test File'
+Last modif.: 'Tue Feb 19 16:47:58 2013'
+Object Tree:
+/ (RootGroup) 'Test File'
+
+
+** Within the file you created in step 1, create two groups, and within each group, create an array of random integers.
+
+In [5]: group_1 = h5file.createGroup(h5file.root, 'group_1', 'Group One')
+
+In [6]: group_2 = h5file.createGroup(h5file.root, 'group_2', 'Group Two')
+In [7]: h5file.createArray(group_1, 'random_group_1', numpy.random.randint(30,size=20), "Just a bunch of random numbers")
+Out[7]:
+/group_1/random_group_1 (Array(20,)) 'Just a bunch of random numbers'
+  atom := Int64Atom(shape=(), dflt=0)
+  maindim := 0
+  flavor := 'numpy'
+  byteorder := 'little'
+  chunkshape := None
+
+In [8]: h5file.createArray(group_2, 'random_group_2', numpy.random.randint(30,size=20), "Just a bunch of random numbers, again")
+Out[8]:
+/group_2/random_group_2 (Array(20,)) 'Just a bunch of random numbers, again'
+  atom := Int64Atom(shape=(), dflt=0)
+  maindim := 0
+  flavor := 'numpy'
+  byteorder := 'little'
+  chunkshape := None
+
+In [9]: print h5file
+/home/deploy/pycon/tutorial1.h5 (File) 'Test File'
+Last modif.: 'Tue Feb 19 16:47:58 2013'
+Object Tree:
+/ (RootGroup) 'Test File'
+/group_1 (Group) 'Group One'
+/group_1/random_group_1 (Array(20,)) 'Just a bunch of random numbers'
+/group_2 (Group) 'Group Two'
+/group_2/random_group_2 (Array(20,)) 'Just a bunch of random numbers, again'
+
+** For each of the groups created, set a datetime attribute, with the value of ‘utcnow’. Confirm the setting of the attribute by viewing the node attributes.
+
+In [10]: from datetime import datetime
+
+In [11]: h5file.setNodeAttr(group_1, 'last_modified', datetime.utcnow())
+
+In [12]: h5file.setNodeAttr(group_2, 'last_modified', datetime.utcnow())
+
+In [13]: group_1._v_attrs
+Out[13]:
+/group_1._v_attrs (AttributeSet), 4 attributes:
+   [CLASS := 'GROUP',
+    TITLE := 'Group One',
+    VERSION := '1.0',
+    last_modified := datetime.datetime(2013, 2, 19, 22, 15, 41, 488087)]
+
+In [14]: group_2._v_attrs
+Out[14]:
+/group_2._v_attrs (AttributeSet), 4 attributes:
+   [CLASS := 'GROUP',
+    TITLE := 'Group Two',
+    VERSION := '1.0',
+    last_modified := datetime.datetime(2013, 2, 19, 22, 15, 47, 953289)]
+
+In [15]: h5file.getNodeAttr(group_1,'last_modified')
+Out[15]: datetime.datetime(2013, 2, 19, 22, 15, 41, 488087)
+
+In [16]: h5file.getNodeAttr(group_2,'last_modified')
+Out[16]: datetime.datetime(2013, 2, 19, 22, 15, 47, 953289)
+
+** Create a third group containing a 60,000 x 60,000 dimensional array of zeroes.
+
+In [17]: group_3 = h5file.createGroup(h5file.root, 'group_3', 'Group Three')
+
+In [18]: ndim = 60000
+
+In [19]: h5file.createArray(group_3, 'random_group_3', numpy.zeros((ndim,ndim)), "Memory overload")
+---------------------------------------------------------------------------
+MemoryError                               Traceback (most recent call last)
+<ipython-input-36-2639f787f6df> in <module>()
+----> 1 h5file.createArray(group_3, 'random_group_3', numpy.zeros((ndim,ndim)), "Memory overload")
+
+MemoryError:
+
+** Repeat the same exercise described in step #3 in a more optimized manner, so that the creation of the array is successful.
+
+In [20]: el = h5file.createEArray(group_3, 'EArray', Int8Atom(),(0,ndim),"Array of zeroes")
+In [21]: for i in range(ndim):
+    el.append(numpy.zeros((1,ndim)))
+In [22]: el[0]
+Out[22]: array([0, 0, 0, ..., 0, 0, 0], dtype=int8)
+
+** Bonus questions:
+
+**. Using pandas, create a Pytable (HDF5) file.
+
+In [23]: from pandas import *
+In [24]: store = HDFStore('/home/deploy/pycon/store.h5')
+
+In [25]: print store
+<class 'pandas.io.pytables.HDFStore'>File path: /home/deploy/pycon/store.h5Empty
+
+** Create a Pandas Series of zeros with an arbitrary index of length 6, and store it in the file created in step 6.
+
+In [26]: s = Series(numpy.zeros(6), index=['a','b','c','d','e','f'])
+In [27]: s
+Out[27]:
+a    0
+b    0
+c    0
+d    0
+e    0
+f    0
+
+In [28]: store
+Out[28]:
+<class 'pandas.io.pytables.HDFStore'>
+File path: /home/deploy/pycon/store.h5
+/s            series       (shape->[6])
+
+In [29]: store['s']
+Out[29]:
+a    0
+b    0
+c    0
+d    0
+e    0
+f    0
+
+
+** Create a Pandas DataFrame with a 6x6 matrix of zeros, and store it in the file created in step 6. Use arbitrary index/column values.
+
+In [30]: df = DataFrame(numpy.zeros((6,6)), index=['a','b','c','d','e','f'], columns = ['1','2','3','4','5','6'])
+
+In [31]: store['df'] = df
+
+In [32]: store
+Out[32]:
+<class 'pandas.io.pytables.HDFStore'>
+File path: /home/deploy/pycon/store.h5
+/df            frame        (shape->[6,6])
+/s             series       (shape->[6])
+
+In [33]: store['df']
+Out[33]:
+   1  2  3  4  5  6
+a  0  0  0  0  0  0
+b  0  0  0  0  0  0
+c  0  0  0  0  0  0
+d  0  0  0  0  0  0
+e  0  0  0  0  0  0
+f  0  0  0  0  0  0
+
